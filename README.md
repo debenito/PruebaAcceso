@@ -1,7 +1,7 @@
 # Servicio de prueba
 Para comenzar con la prueba es necesario levantar los servicios especificados en este documento https://github.com/dalogax/backendDevTest.
 Una vez realizado esto hemos de movernos  a la carpeta raiz de este proyecto /Prueba de acceso y ejecutar los siguientes comandos para levantar el docker (RECORDATORIO: Si en la carpeta target no se encuentra un fichero con extension jar , es necesario  ejecutar el mvn install).
-
+ 
 
 ```
 	docker build -t backend .
