@@ -14,7 +14,7 @@ Una vez realizado lo anterior ya podemos comenzar con las pruebas accediendo a l
 
 
 
-![Diagram](./src/main/resources/assets/Captura1.png "Swagguer")
+![Diagram](./src/main/resources/assets/Captura1.PNG "Swagguer")
 
 
 Primero se ha de desplegar el servicio de busqueda por id que se muestra en la siguiente imagen:
