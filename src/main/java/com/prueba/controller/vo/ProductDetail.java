@@ -30,7 +30,6 @@ public class ProductDetail {
 	private BigDecimal price ;
 	private boolean availability ;
 	public Object compareTo(ProductDetail o2) {
-		// TODO Auto-generated method stub
 		return o2.getId().compareTo(id);
 	}
 

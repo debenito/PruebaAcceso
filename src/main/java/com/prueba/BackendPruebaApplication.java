@@ -14,8 +14,8 @@ import io.swagger.v3.oas.annotations.info.License;
                 version = "r0.0.1",
                 description = "API para la gestión documental",
                 contact = @Contact(
-                        name = "BABEL",
-                        email = "jose.debenito@babelgroup.com",
+                        name = "Personal",
+                        email = "debenito4@gmail.com",
                         url = "https://gitlab.com/"
 
                 ),

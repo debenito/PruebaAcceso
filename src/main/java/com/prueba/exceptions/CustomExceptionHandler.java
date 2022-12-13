@@ -30,53 +30,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler
 	
 	MensajeVO mensaje = new MensajeVO();
 	
-	 @ExceptionHandler(UnknownError.class)
-	  public final ResponseEntity<Object> handleUnknownErrorException(HttpClientErrorException ex, WebRequest request) {
-	        mensaje.setMensaje(ex.getMessage());
-	    	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
-
-			return new ResponseEntity(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	 
-	
-	
-	 @ExceptionHandler(	HttpClientErrorException.class)
-	  public final ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex, WebRequest request) {
-	        mensaje.setMensaje(ex.getMessage());
-	    	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
-	        return new ResponseEntity(mensaje, HttpStatus.NON_AUTHORITATIVE_INFORMATION);
-	    }
-	 
-	 
-  
- 
-    @ExceptionHandler(TimeoutException.class)
-    public final ResponseEntity<Object> handleTimeoutException(TimeoutException ex, WebRequest request) {
-        mensaje.setMensaje(ex.getMessage());
-    	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
-        return new ResponseEntity(mensaje, HttpStatus.GATEWAY_TIMEOUT);
-    }
     
-    @ExceptionHandler(ConnectException.class)
-    public final ResponseEntity<Object> handleConnectException(ConnectException ex, WebRequest request) {
-    	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
-        mensaje.setMensaje(ex.getMessage());
-        return new ResponseEntity(mensaje, HttpStatus.GATEWAY_TIMEOUT);
-    }
-    
-    @ExceptionHandler(UnknownHostException.class)
-    public final ResponseEntity<Object> handleUnknownHostException(UnknownHostException ex, WebRequest request) {
+    @ExceptionHandler(PersonalizadaException.class)
+    public final ResponseEntity<Object> handlePersonalizadaException(PersonalizadaException ex, WebRequest request) {
     	mensaje.setMensaje(ex.getMessage());
     	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
         return new ResponseEntity(mensaje, HttpStatus.NOT_FOUND);
-    }
-
-
-    @ExceptionHandler(PersonalizadaException.class)
-    public final ResponseEntity<Object> handlePersonalizadaException(PersonalizadaException ex, WebRequest request) {
-    	AppLogger.error("", new PersonalizadaException(ex.getMessage()), CustomExceptionHandler.class);
-        mensaje.setMensaje(ex.getMessage());
-        return new ResponseEntity(mensaje, HttpStatus.NOT_ACCEPTABLE);
     }
 
     

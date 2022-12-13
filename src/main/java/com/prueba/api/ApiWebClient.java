@@ -1,5 +1,9 @@
 package com.prueba.api;
 
+
+
+import java.time.Duration;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +35,7 @@ public class ApiWebClient {
 	public Mono<String> ejecutar(String id, boolean similarids) {
 		String uri = similarids ? id+"/similarids" : id;
 		return  WebClient.builder()
+			    
 			  .baseUrl(url).
 			  defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) 
 			  .build().get()

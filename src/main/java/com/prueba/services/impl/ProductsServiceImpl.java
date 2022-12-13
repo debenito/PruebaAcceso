@@ -13,6 +13,7 @@ import com.prueba.controller.vo.SimilarProducts;
 import com.prueba.services.IProductsService;
 import com.prueba.services.converter.ProductDetailConverter;
 import com.prueba.utils.AppLogger;
+import com.prueba.utils.ListProductSimilairsUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,31 +26,38 @@ public class ProductsServiceImpl implements IProductsService {
 	@Autowired
     private  ProductDetailConverter converter;
 	
+	@Autowired
+	ListProductSimilairsUtils<Object> lista;
+	
+	
 	@Cacheable("productos")
     @Override
     public ProductDetail findOne(String id) throws Exception {
-        AppLogger.info("", "Se recibe una id para buscar un producto:", id, ProductsServiceImpl.class);
-        return converter.convertProducto(api.ejecutar(id,false));
+        return lista.contains(id)?(ProductDetail) lista.get(id):
+        	 converter.convertProducto(id,api.ejecutar(id,false));
     }
 
 	@Cacheable("similarids")
 	@Override
 	public SimilarProducts findRelactions(String id) throws Exception {
-		  AppLogger.info("", "Se recibe una id para buscar una lista de productos relacionados:", id, ProductsServiceImpl.class);
-	        List<ProductDetail> array = new ArrayList<ProductDetail>();
-	        converter.convertLista(
-	        		api.ejecutar(id,true))
-	        .parallelStream().forEach(
-				producto -> {
-					try {
-						array.add(findOne(producto));
-					} catch (Exception e) {
-						return;
-					}
-				});
-			return converter.convertListaSimilar(array);
+		
+			return  lista.contains(id+"s")?(SimilarProducts) lista.get(id+"s"):ejecutarLista(id);
 	      
 	}
 
-
+	// Metodo privado encargado de recoger la lista y convertirla al objeto SimilarProducts
+	private SimilarProducts ejecutarLista(String id){
+		List<ProductDetail> array = new ArrayList<ProductDetail>();
+        converter.convertLista(
+        		api.ejecutar(id,true))
+        .parallelStream().forEach(
+			producto -> {
+				try {
+					array.add(findOne(producto));
+				} catch (Exception e) {
+					return;
+				}
+			});
+        return converter.convertListaSimilar(id,array);
+	}
 }
