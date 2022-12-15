@@ -1,7 +1,6 @@
 package com.prueba.services.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,9 +10,6 @@ import com.prueba.api.ApiWebClient;
 import com.prueba.controller.vo.ProductDetail;
 import com.prueba.controller.vo.SimilarProducts;
 import com.prueba.services.IProductsService;
-import com.prueba.services.converter.ProductDetailConverter;
-import com.prueba.utils.AppLogger;
-import com.prueba.utils.ListProductSimilairsUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,41 +19,29 @@ public class ProductsServiceImpl implements IProductsService {
 	@Autowired
     private  ApiWebClient api;
 
-	@Autowired
-    private  ProductDetailConverter converter;
 	
-	@Autowired
-	ListProductSimilairsUtils<Object> lista;
 	
 	
 	@Cacheable("productos")
     @Override
     public ProductDetail findOne(String id) throws Exception {
-        return lista.contains(id)?(ProductDetail) lista.get(id):
-        	 converter.convertProducto(id,api.ejecutar(id,false));
+        return api.ejecutarProducto(id);
     }
 
 	@Cacheable("similarids")
 	@Override
 	public SimilarProducts findRelactions(String id) throws Exception {
-		
-			return  lista.contains(id+"s")?(SimilarProducts) lista.get(id+"s"):ejecutarLista(id);
-	      
-	}
-
-	// Metodo privado encargado de recoger la lista y convertirla al objeto SimilarProducts
-	private SimilarProducts ejecutarLista(String id){
-		List<ProductDetail> array = new ArrayList<ProductDetail>();
-        converter.convertLista(
-        		api.ejecutar(id,true))
-        .parallelStream().forEach(
-			producto -> {
+		SimilarProducts similar = SimilarProducts.builder().build();
+			  api.ejecutar(id).parallelStream().forEach(p->{
 				try {
-					array.add(findOne(producto));
+					similar.add(api.ejecutarProducto(p));
 				} catch (Exception e) {
+					// TODO Auto-generated catch block
 					return;
 				}
 			});
-        return converter.convertListaSimilar(id,array);
+				Collections.sort(similar, (o1, o2) -> o1.getId().compareTo(o2.getId()));
+	      return similar;
 	}
+
 }
