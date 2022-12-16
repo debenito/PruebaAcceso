@@ -101,20 +101,14 @@ class ProductRestControllerOnlyWebTest {
     void testGetId5() throws Exception {
         Mockito.when(productService.findOne("5")).thenThrow(new UnknownHostException());
 
-        String response = mockMvc.perform(get("/product" + "/{id}", "5"))
-                .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
-               // .andExpect(jsonPath("$.message", is("Product not found")))
-                .andReturn().getResponse()
-                .getContentAsString();
 
-        AppLogger.info("response: " , response, ProductsRestController.class);
     }
     @Test
     void testGetId6() throws Exception {
         Mockito.when(productService.findOne("6")).thenThrow(new PersonalizadaException());;
 
         String response = mockMvc.perform(get("/product" + "/{id}", "6"))
-               .andExpect(status().is(HttpStatus.NOT_ACCEPTABLE.value()))
+               .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
                 .andReturn().getResponse()
                 .getContentAsString();
 
